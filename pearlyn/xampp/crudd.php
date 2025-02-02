@@ -15,12 +15,22 @@ if(isset($_POST["insert_button"])){
         $created_by=$_POST["created_by"];
         $request_date=$_POST["request_date"];
         $status=$_POST["status"];
-        $query=$connect->prepare("INSERT into req( ITEM_NAME, QUANTITY, DEPARTMENT, PRIORITY_LEVEL, CREATED_BY, REQUEST_DATE, STATUS) values
-        (?,?,?,?,?,?,?)");
-        $query->bind_param('isissss', $itemname, $quantity, $department, $priority_level, $created_by, $request_date, $status);//bind the parameters
-        if($query->execute())
-        {
-            echo "<center><b>Record Inserted!</b></center><br>";
+        $valid_pattern = "/^[a-zA-Z0-9\s\-,.()]+$/";
+
+        if (!preg_match($valid_pattern, $itemname) || 
+            !preg_match($valid_pattern, $department) || 
+            !preg_match($valid_pattern, $created_by)) {
+            echo "<script>alert('Invalid input! Only letters, numbers, spaces, and -,.() are allowed.');</script>";
+        } else {
+            // Prepare and bind
+            $query = $connect->prepare("INSERT INTO req(ITEM_NAME, QUANTITY, DEPARTMENT, PRIORITY_LEVEL, CREATED_BY, REQUEST_DATE, STATUS) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $query->bind_param('sisssss', $itemname, $quantity, $department, $priority_level, $created_by, $request_date, $status);
+
+            if ($query->execute()) {
+                echo "<script>alert('Record Inserted Successfully!');</script>";
+            } else {
+                echo "<script>alert('Error inserting record.');</script>";
+            }
         }
     }
 }
