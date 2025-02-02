@@ -51,7 +51,14 @@ if (isset($_POST["update_button"])) {
         $created_by = $_POST["created_by"];
         $request_date = $_POST["request_date"];
         $status = $_POST["status"];
+        $valid_pattern = "/^[a-zA-Z0-9\s\-,.()]+$/";
 
+        if (!preg_match($valid_pattern, $itemname) || 
+            !preg_match($valid_pattern, $department) || 
+            !preg_match($valid_pattern, $created_by)) {
+            echo "<script>alert('Invalid input! Only letters, numbers, spaces, and -,.() are allowed.');window.location.href='edit.php';</script>";
+            die(); 
+        }
         $check_query = $connect->prepare("SELECT REQUEST_ID FROM req WHERE REQUEST_ID = ?");
         $check_query->bind_param('i', $request_id);
         $check_query->execute();
