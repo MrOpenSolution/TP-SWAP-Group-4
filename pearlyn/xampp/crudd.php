@@ -1,9 +1,10 @@
 <?php
-$connect=mysqli_connect("localhost","root","","requests");
-if ($connect->connect_error) {
-    die("Connection failed: " . $connect->connect_error);
-  }
-  echo "Connected successfully";
+$connect = mysqli_connect("localhost", "root", "", "requests");
+if (!$connect) {
+    echo "<script>alert('Connection failed: " . mysqli_connect_error() . "');</script>";
+} else {
+    echo "<script>alert('Connected successfully');</script>";
+}
 if(isset($_POST["insert_button"])){
     if($_POST["insert"]=="yes")
     {   
