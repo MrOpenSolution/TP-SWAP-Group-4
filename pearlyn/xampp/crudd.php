@@ -73,14 +73,14 @@ if (isset($_POST["update_button"])) {
 
         if ($query->execute()) {
             if ($query->affected_rows > 0) {
-                echo "<center>Record Updated Successfully!</center><br>";
+                echo "<script>alert('Record Updated Successfully!');</script>";
             } else {
-                echo "<center>No changes made to the record.</center><br>";
+                echo "<script>alert('No changes made to the record.');</script>";
             }
         } else {
-            echo "Error during query execution: " . $query->error . "<br>";
-        }
-
+            echo "<script>alert('Error during query execution: " . $query->error . "');</script>";
+        }        
+        
         $query->close();
     }
 }
@@ -90,7 +90,7 @@ if(isset($_POST["delete_button"])){
     $query->bind_param('i', $request_id);
     if($query->execute())
     {
-        echo "<center>Record Deleted!</center><br>";
+        echo "<script>alert('Record Deleted!');</script>";
     }
 }
 ?>
