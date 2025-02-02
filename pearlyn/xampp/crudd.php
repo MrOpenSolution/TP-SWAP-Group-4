@@ -92,7 +92,8 @@ if(isset($_POST["delete_button"])){
 
            <tr>
                 <td>Quantity:</td>
-                <td><input type="text" name="quantity" value="<?php echo isset($_GET['quantity']) ? htmlspecialchars($_GET['quantity'], ENT_QUOTES, 'UTF-8') : ''; ?>" /></td>
+                <td><input type="number" name="quantity" min="1" step="1" value="<?php echo isset($_GET['quantity']) ? htmlspecialchars($_GET['quantity'], ENT_QUOTES, 'UTF-8') : ''; ?>" 
+                oninput="this.value = this.value.replace(/[^0-9]/g, '');"/></td>
             </tr>
             <tr>
                 <td>Department:</td>
