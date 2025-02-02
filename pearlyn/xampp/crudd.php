@@ -56,7 +56,18 @@ if (isset($_POST["update_button"])) {
         if (!preg_match($valid_pattern, $itemname) || 
             !preg_match($valid_pattern, $department) || 
             !preg_match($valid_pattern, $created_by)) {
-            echo "<script>alert('Invalid input! Only letters, numbers, spaces, and -,.() are allowed.');window.location.href='edit.php';</script>";
+            echo "<script>
+            alert('Invalid input! Only letters, numbers, spaces, and -,.() are allowed.');
+            window.location.href='edit.php?operation=edit&request_id=' + encodeURIComponent('" . $request_id . "') + 
+                              '&itemname=' + encodeURIComponent('" . $itemname . "') + 
+                              '&quantity=' + encodeURIComponent('" . $quantity . "') + 
+                              '&department=' + encodeURIComponent('" . $department . "') + 
+                              '&priority_level=' + encodeURIComponent('" . $priority_level . "') + 
+                              '&created_by=' + encodeURIComponent('" . $created_by . "') + 
+                              '&request_date=' + encodeURIComponent('" . $request_date . "') + 
+                              '&status=' + encodeURIComponent('" . $status . "');
+          </script>";
+
             die(); 
         }
         $check_query = $connect->prepare("SELECT REQUEST_ID FROM req WHERE REQUEST_ID = ?");
