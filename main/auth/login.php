@@ -25,14 +25,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['user_id'] = $user_id;
                 $_SESSION['username'] = $username;
                 $_SESSION['role'] = $role;
-                /*
                 // Redirect based on role
                 if ($role === 'Admin') {
-                    header("Location: admin_dashboard.php");
+                    header("Location: ../admin_dashboard.php");
                 } elseif ($role === 'Procurement Officer') {
-                    header("Location: officer_dashboard.php");
+                    header("Location: ../officer_dashboard.php");
                 } elseif ($role === 'Department Head') {
-                    header("Location: head_dashboard.php");
+                    header("Location: ../head_dashboard.php");
                 }
                 */
                 exit();
