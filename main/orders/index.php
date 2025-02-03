@@ -1,16 +1,18 @@
 <?php
 session_start();
+include_once '../common/db_conn.php';
 $conn = new mysqli("localhost", "root", "", "swap_secure_amc");
 
+/* TODO Add back
 // Check if the user is logged in
-if (!isset($_SESSION['user_role'])) {
+if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
 }
-
+*/
 // Redirect based on user role for "Back to Dashboard"
 function getDashboardRedirect() {
-    switch ($_SESSION['user_role']) {
+    switch ($_SESSION['role']) {
         case 'admin':
             return "admin_dashboard.php";
         case 'officer':
@@ -27,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_order'])) {
     $vendor_id = $_POST['vendor_id'];
     $items = $_POST['items'];
     $quantity = $_POST['quantity'];
-    $requested_by = $_SESSION['user_role'];
+    $requested_by = $_SESSION['user_id'];
 
     if ($quantity >= 1) {
         $conn->query("INSERT INTO purchase_orders (requested_by, vendor_id, items, quantity, status) 
@@ -51,10 +53,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_order'])) {
 }
 
 // Handle deletions
-if (isset($_GET['delete_order'])) {
-    $order_id = $_GET['delete_order'];
+// FIXME This should use delete
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_order'])) {
+    $order_id = $_POST['delete_order'];
     $conn->query("DELETE FROM purchase_orders WHERE order_id = '$order_id'");
-    header("Location: manage_orders.php");
+    header("Location: index.php");
     exit;
 }
 
