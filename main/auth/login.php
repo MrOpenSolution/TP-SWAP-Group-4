@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'config.php';  // Include database configuration
+include_once '../common/db_conn.php';  // Include database configuration
 
 // Initialize error message
 $error = '';
@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = trim($_POST['password']);
     
     if (!empty($username) && !empty($password)) {
-        $stmt = $conn->prepare("SELECT user_id, password_hash, role FROM users WHERE username = ?");
+        $stmt = $conn->prepare("SELECT user_id, password_hash, role FROM USERS WHERE username = ?");
         $stmt->bind_param("s", $username);
         $stmt->execute();
         $stmt->store_result();
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['user_id'] = $user_id;
                 $_SESSION['username'] = $username;
                 $_SESSION['role'] = $role;
-
+                /*
                 // Redirect based on role
                 if ($role === 'Admin') {
                     header("Location: admin_dashboard.php");
@@ -34,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } elseif ($role === 'Department Head') {
                     header("Location: head_dashboard.php");
                 }
+                */
                 exit();
             } else {
                 $error = "Invalid password.";
@@ -56,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Login - Secure AMC</title>
     <style>
         body {
-            background: url('login.png') no-repeat center center fixed;
+            background: url('../img/login.png') no-repeat center center fixed;
             background-size: cover;
             font-family: Arial, sans-serif;
             margin: 0;
@@ -137,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <div class="login-container">
     <div class="login-box">
-        <img src="temasek_logo.png" alt="Temasek Logo">
+        <img src="../img/temasek_logo.png" alt="Temasek Logo">
         <h2>Sign in</h2>
         <p>to continue to Dashboard</p>
         <?php if ($error) echo "<p class='error'>$error</p>"; ?>
