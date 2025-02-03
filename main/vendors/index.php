@@ -22,11 +22,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_vendor'])) {
     $payment_terms = $_POST['payment_terms'];
 
     if (!empty($name) && !empty($contact_info) && !empty($services) && !empty($payment_terms)) {
-        $stmt = $conn->prepare("INSERT INTO VENDORS (name, contact_info, services, payment_terms) VALUES (?, ?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO VENDORS (name, contact_information, services, payment_terms) VALUES (?, ?, ?, ?)");
         $stmt->bind_param("ssss", $name, $contact_info, $services, $payment_terms);
         $stmt->execute();
         $stmt->close();
-        header("Location: manage_vendors.php");
+        header("Location: index.php");
         exit();
     }
 }
@@ -41,10 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_vendor'])) {
 
     if (!empty($vendor_id) && !empty($name) && !empty($contact_info) && !empty($services) && !empty($payment_terms)) {
         $stmt = $conn->prepare("UPDATE VENDORS SET name = ?, contact_info = ?, services = ?, payment_terms = ? WHERE vendor_id = ?");
-        $stmt->bind_param("ssssi", $name, $contact_info, $services, $payment_terms, $vendor_id);
+        $stmt->bind_param($name, $contact_info, $services, $payment_terms, $vendor_id);
         $stmt->execute();
         $stmt->close();
-        header("Location: manage_vendors.php");
+        header("Location: index.php");
         exit();
     }
 }
