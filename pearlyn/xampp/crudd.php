@@ -1,4 +1,7 @@
 <?php
+session_start(); 
+if (!isset($_SESSION['role'])) { die("Access denied. Please log in."); }
+
 $connect = mysqli_connect("localhost", "root", "", "requests");
 if (!$connect) {
     echo "<script>alert('Connection failed: " . mysqli_connect_error() . "');</script>";
@@ -36,6 +39,11 @@ if(isset($_POST["insert_button"])){
 }
 
 if (isset($_POST["update_button"])) {
+    if ($_SESSION['role'] !== 'Admin' && $_SESSION['role'] !== 'Procurement Officer') {
+        die("Unauthorized access.");
+    }
+
+
     if (isset($_POST["request_id"], $_POST["item_name"], $_POST["quantity"], $_POST["department"], $_POST["priority_level"], $_POST["created_by"], $_POST["request_date"], $_POST["status"])) {
         $request_id = $_POST["request_id"];
 
@@ -96,6 +104,11 @@ if (isset($_POST["update_button"])) {
     }
 }
 if(isset($_POST["delete_button"])){
+    if (isset($_POST["delete_button"])) {
+        if ($_SESSION['role'] !== 'Admin') {
+            die("Unauthorized access.");
+        }
+    
     $request_id=$_POST["request_id"];
     $query=$connect->prepare("DELETE FROM req WHERE REQUEST_ID=?");
     $query->bind_param('i', $request_id);
@@ -103,6 +116,7 @@ if(isset($_POST["delete_button"])){
     {
         echo "<script>alert('Record Deleted!');</script>";
     }
+}
 }
 ?>
 <!DOCTYPE html>
@@ -184,8 +198,28 @@ echo "<th>EDIT</th>";
 echo "<th>DELETE</th>";
 echo "</tr>";
 
-while($query->fetch())
-{
+
+// while($query->fetch())
+// {
+//     echo "<tr>";
+//     echo "<td>".$request_id."</td>";
+//     echo "<td>".$itemname."</td>";
+//     echo "<td>".$quantity."</td>";
+//     echo "<td>".$department."</td>";
+//     echo "<td>".$priority_level."</td>";
+//     echo "<td>".$created_by."</td>";
+//     echo "<td>".$request_date."</td>";
+//     echo "<td>".$status."</td>";
+//     echo "<td><a href='edit.php?operation=edit&request_id=".urlencode($request_id)."&itemname=".urlencode($itemname)."&quantity=".urlencode($quantity)."&department=".urlencode($department)."&priority_level=".urlencode($priority_level)."&created_by=".urlencode($created_by)."&request_date=".urlencode($request_date)."&status=".urlencode($status)."'>edit</a></td>";
+
+//     echo "<td align='center'>";
+//     echo "<input type='hidden' name='request_id' value=".$request_id." />";
+//     echo "<input type='submit' name='delete_button' value='delete' class='button' />";
+//     echo "</td>";   
+//     echo "</tr>";   
+// }
+
+while ($query->fetch()) {
     echo "<tr>";
     echo "<td>".$request_id."</td>";
     echo "<td>".$itemname."</td>";
@@ -195,17 +229,42 @@ while($query->fetch())
     echo "<td>".$created_by."</td>";
     echo "<td>".$request_date."</td>";
     echo "<td>".$status."</td>";
-    echo "<td><a href='edit.php?operation=edit&request_id=".urlencode($request_id)."&itemname=".urlencode($itemname)."&quantity=".urlencode($quantity)."&department=".urlencode($department)."&priority_level=".urlencode($priority_level)."&created_by=".urlencode($created_by)."&request_date=".urlencode($request_date)."&status=".urlencode($status)."'>edit</a></td>";
 
-    echo "<td align='center'>";
-    echo "<input type='hidden' name='request_id' value=".$request_id." />";
-    echo "<input type='submit' name='delete_button' value='delete' class='button' />";
-    echo "</td>";   
-    echo "</tr>";   
+
+
+
+    $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'Guest';
+
+
+    if ($role === 'Admin' || $role === 'Procurement Officer') {
+
+
+        echo "<td><a href='edit.php?operation=edit&request_id=".urlencode($request_id)."&itemname=".urlencode($itemname)."&quantity=".urlencode($quantity)."&department=".urlencode($department)."&priority_level=".urlencode($priority_level)."&created_by=".urlencode($created_by)."&request_date=".urlencode($request_date)."&status=".urlencode($status)."'>Edit</a></td>";
+    } else {
+        echo "<td>No Actions</td>";
+    }
+
+
+    if ($role === 'Admin') {
+
+
+        echo "<td align='center'>";
+        echo "<form method='post' action='crudd.php'>";
+        echo "<input type='hidden' name='request_id' value=".$request_id." />";
+        echo "<input type='submit' name='delete_button' value='Delete' class='button' />";
+        echo "</form>";
+        echo "</td>";
+    } else {
+        echo "<td>No Actions</td>";
+    }
+
+
+    echo "</tr>";
 }
 echo "</table>";
 ?>
+
+
     </form>
 </body>
 </html>
-
