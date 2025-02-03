@@ -5,7 +5,7 @@ USE APP;
 CREATE TABLE USERS (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) UNIQUE NOT NULL,
-    password_hash VARCHAR(255), -- Can be NULL 
+    password_hash VARCHAR(255) DEFAULT NULL, -- Can be NULL 
     email VARCHAR(255) UNIQUE NOT NULL,
     role ENUM('Admin', 'Procurement Officer', 'Department Head') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Audit purposes
@@ -16,14 +16,12 @@ CREATE TABLE USERS (
 CREATE TABLE VENDORS (
     vendor_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    contact_information VARCHAR(255) NOT NULL,
-    service_provided TEXT DEFAULT NULL,
+    contact_info VARCHAR(8) NOT NULL,
+    services TEXT DEFAULT NULL,
     payment_terms TEXT DEFAULT NULL,
     created_by INT, -- Reference to user_id in USERS table
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Audit purposes
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Audit purposes
-    contact_info VARCHAR(8) DEFAULT NULL, -- Assuming Singapore number
-    services VARCHAR(255) DEFAULT NULL,
     FOREIGN KEY (created_by) REFERENCES USERS(user_id) -- Foreign key constraint
 );
 

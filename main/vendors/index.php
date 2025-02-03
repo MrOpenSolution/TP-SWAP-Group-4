@@ -22,8 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_vendor'])) {
     $payment_terms = $_POST['payment_terms'];
 
     if (!empty($name) && !empty($contact_info) && !empty($services) && !empty($payment_terms)) {
-        $stmt = $conn->prepare("INSERT INTO VENDORS (name, contact_information, services, payment_terms) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $name, $contact_info, $services, $payment_terms);
+        $stmt = $conn->prepare("INSERT INTO VENDORS (name, contact_info, services, payment_terms,created_by) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssi", $name, $contact_info, $services, $payment_terms,$_SESSION['user_id']);
         $stmt->execute();
         $stmt->close();
         header("Location: index.php");
@@ -60,6 +60,16 @@ $vendors = $conn->query("SELECT * FROM VENDORS");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Vendors - Secure AMC</title>
     <link rel="stylesheet" href="../css/styles.css">
+    <style>
+            body {
+            background: url('../img/dashboard.jpg') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+    </style>
 </head>
 <body>
 

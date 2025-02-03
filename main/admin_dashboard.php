@@ -3,7 +3,7 @@ session_start();
 
 // Check if user is logged in and is an Admin
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') {
-    header("Location: login.php"); // Redirect to login if not an admin
+    header("Location: auth/login.php"); // Redirect to login if not an admin
     exit();
 }
 $username = $_SESSION['username']; // Get admin's username

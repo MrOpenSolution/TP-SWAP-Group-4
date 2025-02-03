@@ -16,10 +16,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_user'])) {
     $username = $_POST['username'];
     $email = $_POST['email'];
     $role = $_POST['role'];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-
-    $stmt = $conn->prepare("INSERT INTO USERS (username, email, password_hash, role) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("ssss", $username, $email, $password, $role);
+    $stmt = $conn->prepare("INSERT INTO USERS (username, email, role) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss",$username, $email, $role);
     $stmt->execute();
     header("Location: manage_users.php");
     exit();
@@ -31,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_user'])) {
     $username = $_POST['username'];
     $email = $_POST['email'];
     $role = $_POST['role'];
-
+    //TODO This should not silently do this
     // Prevent admins from changing their own role
     if ($user_id == $_SESSION['user_id']) {
         $stmt = $conn->prepare("UPDATE USERS SET username = ?, email = ? WHERE user_id = ?");
@@ -71,6 +69,29 @@ if (isset($_GET['edit'])) {
 <html>
 <head>
     <title>Manage Users</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+th {
+    background-color: #dc3545; /* Red background for the header */
+    color: white; /* White text color */
+    padding: 10px; /* Padding for the header cells */
+    text-align: left; /* Align text to the left */
+    border: 1px solid white; /* Invisible white border */
+}
+
+td {
+    padding: 10px; /* Padding for the data cells */
+    border: 1px solid white; /* Invisible white border */
+}
+table {
+    width: 100%; /* Adjust the width as needed */
+}
+</style>
 </head>
 <body>
     <h1>Manage Users</h1>
@@ -104,10 +125,10 @@ if (isset($_GET['edit'])) {
         </tr>
         <?php while ($row = $result->fetch_assoc()): ?>
             <tr>
-                <td><?= $row['user_id'] ?></td>
+                <td><?= htmlspecialchars($row['user_id']) ?></td>
                 <td><?= htmlspecialchars($row['username']) ?></td>
                 <td><?= htmlspecialchars($row['email']) ?></td>
-                <td><?= $row['role'] ?></td>
+                <td><?= htmlspecialchars($row['role']) ?></td>
                 <td>
                     <a href="manage_users.php?edit=<?= $row['user_id'] ?>">Edit</a>
                     <?php if ($row['user_id'] != $_SESSION['user_id']): ?>
