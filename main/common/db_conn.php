@@ -1,6 +1,6 @@
 <?php
 // Database connection
-$host = 'db';
+$host = 'localhost';
 $user = 'root';
 $password = 'password';
 $dbname = 'APP';
