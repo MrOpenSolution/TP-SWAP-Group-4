@@ -1,9 +1,9 @@
 <?php
 // Database connection
-$host = 'localhost';
+$host = 'db';
 $user = 'root';
-$password = '';
-$dbname = 'swap_secure_amc';
+$password = 'password';
+$dbname = 'APP';
 
 $conn = new mysqli($host, $user, $password, $dbname);
 
