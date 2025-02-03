@@ -1,13 +1,11 @@
 <?php
 session_start();
-require 'config.php'; // Database connection
 
 // Check if user is logged in and is an Admin
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') {
     header("Location: login.php"); // Redirect to login if not an admin
     exit();
 }
-
 $username = $_SESSION['username']; // Get admin's username
 ?>
 
@@ -24,10 +22,10 @@ $username = $_SESSION['username']; // Get admin's username
         <h1>Welcome, <?php echo htmlspecialchars($username); ?> (Admin)</h1>
         <nav>
             <ul>
-                <li><a href="manage_users.php">Manage Users</a></li>
+                <li><a href="user_management/manage_users.php">Manage Users</a></li>
                 <li><a href="manage_vendors.php">Manage Vendors</a></li>
                 <li><a href="manage_orders.php">Manage Purchase Orders</a></li>
-                <li><a href="logout.php">Logout</a></li>
+                <li><a href="auth/logout.php">Logout</a></li>
             </ul>
         </nav>
     </div>

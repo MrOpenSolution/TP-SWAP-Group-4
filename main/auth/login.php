@@ -33,7 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } elseif ($role === 'Department Head') {
                     header("Location: ../head_dashboard.php");
                 }
-                */
                 exit();
             } else {
                 $error = "Invalid password.";

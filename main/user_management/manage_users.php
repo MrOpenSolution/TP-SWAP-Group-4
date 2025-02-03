@@ -74,7 +74,7 @@ if (isset($_GET['edit'])) {
 </head>
 <body>
     <h1>Manage Users</h1>
-    <a href="admin_dashboard.php">Back to Dashboard</a>
+    <a href="../admin_dashboard.php">Back to Dashboard</a>
 
     <h2><?= $edit_user ? "Edit User" : "Add User" ?></h2>
     <form method="POST">
