@@ -5,7 +5,7 @@ USE APP;
 CREATE TABLE USERS (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL, 
+    password_hash VARCHAR(255), -- Can be NULL 
     email VARCHAR(255) UNIQUE NOT NULL,
     role ENUM('Admin', 'Procurement Officer', 'Department Head') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Audit purposes
