@@ -9,16 +9,31 @@
         <table align="center" border="0">
             <tr>
                 <td>Item Name:</td>
-                <td><input type="text" name="item_name" value="<?php echo isset($_GET['item_name']) ? htmlspecialchars($_GET['item_name'], ENT_QUOTES, 'UTF-8') : ''; ?>" /></td>
+                <td>
+                    <input type="text" name="itemname" 
+                           value="<?php echo isset($_GET['itemname']) && !empty($_GET['itemname']) 
+                                         ? htmlspecialchars($_GET['itemname'], ENT_QUOTES, 'UTF-8') 
+                                         : (isset($_POST['itemname']) ? htmlspecialchars($_POST['itemname'], ENT_QUOTES, 'UTF-8') : ''); ?>" /> 
+                </td>
             </tr>
             <tr>
                 <td>Quantity:</td>
-                <td><input type="number" name="quantity" min="1" step="1" value="<?php echo isset($_GET['quantity']) ? htmlspecialchars($_GET['quantity'], ENT_QUOTES, 'UTF-8') : ''; ?>" 
-                oninput="this.value = this.value.replace(/[^0-9]/g, '');"/></td>
+                <td>
+                    <input type="number" name="quantity" min="1" step="1" 
+                           value="<?php echo isset($_GET['quantity']) && !empty($_GET['quantity']) 
+                                         ? htmlspecialchars($_GET['quantity'], ENT_QUOTES, 'UTF-8') 
+                                         : (isset($_POST['quantity']) ? htmlspecialchars($_POST['quantity'], ENT_QUOTES, 'UTF-8') : ''); ?>" 
+                           oninput="this.value = this.value.replace(/[^0-9]/g, '');"/>
+                </td>
             </tr>
             <tr>
                 <td>Department:</td>
-                <td><input type="text" name="department" value="<?php echo isset($_GET['department']) ? htmlspecialchars($_GET['department'], ENT_QUOTES, 'UTF-8') : ''; ?>" /></td>
+                <td>
+                    <input type="text" name="department" 
+                           value="<?php echo isset($_GET['department']) && !empty($_GET['department']) 
+                                         ? htmlspecialchars($_GET['department'], ENT_QUOTES, 'UTF-8') 
+                                         : (isset($_POST['department']) ? htmlspecialchars($_POST['department'], ENT_QUOTES, 'UTF-8') : ''); ?>" />
+                </td>
             </tr>
             <tr>
                 <td>Priority Level:</td>
@@ -32,7 +47,12 @@
             </tr>
             <tr>
                 <td>Created By:</td>
-                <td><input type="text" name="created_by" value="<?php echo isset($_GET['created_by']) ? htmlspecialchars($_GET['created_by'], ENT_QUOTES, 'UTF-8') : ''; ?>" /></td>
+                <td>
+                    <input type="text" name="created_by" 
+                           value="<?php echo isset($_GET['created_by']) && !empty($_GET['created_by']) 
+                                         ? htmlspecialchars($_GET['created_by'], ENT_QUOTES, 'UTF-8') 
+                                         : (isset($_POST['created_by']) ? htmlspecialchars($_POST['created_by'], ENT_QUOTES, 'UTF-8') : ''); ?>" />
+                </td>
             </tr>
             <tr>
                 <td>Request Day:</td>
