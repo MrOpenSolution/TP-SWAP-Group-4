@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  php:
+    build:
+      context: .
+      dockerfile: ./php/Dockerfile
+    image: php
+    container_name: php_app
+    volumes:
+      - ./../app:/var/www/html:ro
+    ports:
+      - "8000:80"
+    security_opt:
+      - label:disable
+    network:
+      - internal-network
+  db:
+    build:
+      context: .
+      dockerfile: ./mysql/Dockerfile
+    image: db
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    restart: always
+    network:
+      - internal-network
+volumes:
+  db_data:
+networks:
+   internal-network:
