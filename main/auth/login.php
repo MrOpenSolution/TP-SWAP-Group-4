@@ -26,13 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['username'] = $username;
                 $_SESSION['role'] = $role;
                 // Redirect based on role
-                if ($role === 'Admin') {
-                    header("Location: ../admin_dashboard.php");
-                } elseif ($role === 'Procurement Officer') {
-                    header("Location: ../officer_dashboard.php");
-                } elseif ($role === 'Department Head') {
-                    header("Location: ../head_dashboard.php");
-                }
+                header("Location: ../dashboard.php");
                 exit();
             } else {
                 $error = "Invalid password.";

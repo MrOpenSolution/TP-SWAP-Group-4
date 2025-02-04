@@ -1,12 +1,21 @@
 <?php
-// Database connection
-$host = 'DB';
-$user = 'root';
-$password = 'password';
-$dbname = 'APP';
+// Database connection function
+function getconn() {
+    $host = 'localhost';
+    $user = 'root';
+    $password = 'password';
+    $dbname = 'APP';
 
-$conn = new mysqli($host, $user, $password, $dbname);
+    // Create a new mysqli connection
+    $conn = new mysqli($host, $user, $password, $dbname);
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    // Check for connection errors
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    return $conn;
 }
+
+// For legacy usage
+$conn = getconn();

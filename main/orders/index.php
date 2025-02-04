@@ -1,7 +1,6 @@
 <?php
 session_start();
 include_once '../common/db_conn.php';
-$conn = new mysqli("localhost", "root", "", "swap_secure_amc");
 
 /* TODO Add back
 // Check if the user is logged in
@@ -10,19 +9,6 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 */
-// Redirect based on user role for "Back to Dashboard"
-function getDashboardRedirect() {
-    switch ($_SESSION['role']) {
-        case 'admin':
-            return "admin_dashboard.php";
-        case 'officer':
-            return "officer_dashboard.php";
-        case 'head':
-            return "head_dashboard.php";
-        default:
-            return "login.php";
-    }
-}
 
 // Handle creating new orders
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_order'])) {
@@ -56,14 +42,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_order'])) {
 // FIXME This should use delete
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_order'])) {
     $order_id = $_POST['delete_order'];
-    $conn->query("DELETE FROM purchase_orders WHERE order_id = '$order_id'");
+    $conn->query("DELETE FROM ORDERS WHERE order_id = '$order_id'");
     header("Location: index.php");
     exit;
 }
 
 // Fetch all orders
-$result = $conn->query("SELECT p.*, v.name AS vendor_name FROM purchase_orders p 
-                        LEFT JOIN vendors v ON p.vendor_id = v.vendor_id");
+$orders = $conn->query("SELECT * FROM ORDERS");
+$vendors = $conn->query("SELECT vendor_id, name FROM VENDORS");
 ?>
 
 <!DOCTYPE html>
@@ -72,10 +58,15 @@ $result = $conn->query("SELECT p.*, v.name AS vendor_name FROM purchase_orders p
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Orders</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
     <style>
-        body {
-            background-color: #f0f8ff;
+    <style>
+            body {
+            background: url('../img/dashboard.jpg') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
         }
         .container {
             background-color: white;
@@ -104,38 +95,26 @@ $result = $conn->query("SELECT p.*, v.name AS vendor_name FROM purchase_orders p
 </head>
 <body>
     <div class="container">
-        <h2>Manage Orders</h2>
-        
-        <!-- Back to Dashboard with dynamic redirection -->
-        <a href="<?= getDashboardRedirect() ?>" class="d-block mb-3">Back to Dashboard</a>
+        <div class="vendors-box">
+        <h1>Manage Orders</h1>
+        <a href="../dashboard.php" class="back-link">Back to Dashboard</a>
 
-        <h4>Add New Order</h4>
-        <form method="POST" class="mb-4">
-            <div class="row g-2">
-                <div class="col-md-3">
-                    <select class="form-select" name="vendor_id" required>
-                        <option value="">Select Vendor</option>
-                        <?php
-                        $vendors = $conn->query("SELECT vendor_id, name FROM vendors");
-                        while ($row = $vendors->fetch_assoc()) {
-                            echo "<option value='{$row['vendor_id']}'>{$row['name']}</option>";
-                        }
-                        ?>
+        <h3>Add New Order</h3>
+        <form method="POST" action="">
+             <select class="form-select" name="vendor_id" required>
+             <option value="">Select Vendor</option>
+             <?php
+                   while ($vendor = $vendors->fetch_assoc()) {
+                   echo htmlspecialchars("<option value='{$vendor['vendor_id']}'>{$vendor['name']}</option>");
+                   }
+             ?>
                     </select>
-                </div>
-                <div class="col-md-4">
                     <input type="text" name="items" class="form-control" placeholder="Items" required>
-                </div>
-                <div class="col-md-2">
                     <input type="number" name="quantity" class="form-control" placeholder="Quantity" required min="1">
-                </div>
-                <div class="col-md-3">
                     <button type="submit" name="create_order" class="btn btn-success w-100">Create Order</button>
-                </div>
-            </div>
         </form>
 
-        <h4>Existing Orders</h4>
+        <h3>Existing Orders</h3>
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
@@ -151,17 +130,26 @@ $result = $conn->query("SELECT p.*, v.name AS vendor_name FROM purchase_orders p
                 </tr>
             </thead>
             <tbody>
-                <?php while ($row = $result->fetch_assoc()): ?>
+                <?php while ($order = $orders->fetch_assoc()): ?>
                 <tr>
                     <form method="POST">
-                        <td><?= $row['order_id'] ?></td>
-                        <td><?= $row['requested_by'] ?></td>
+                        <td>
+                           <?php echo $order['order_id'] ?>
+                           <input type="hidden" name="order_id" value="<?php echo $vendor['order_id']; ?>">
+                        </td>
+                        <td>
+                           <?php 
+                           
+                            echo $order['order_id'] ?>
+                           <input type="hidden" name="order_id" value="<?php echo $vendor['order_id']; ?>">
+                        </td>
+                        <td><?= $order['requested_by'] ?></td>
+                        <td><?= $order['requested_by'] ?></td>
                         <td>
                             <input type="hidden" name="order_id" value="<?= $row['order_id'] ?>">
                             <select class="form-select" name="vendor_id">
                                 <option value="<?= $row['vendor_id'] ?>" selected><?= $row['vendor_name'] ?></option>
-                                <?php
-                                $vendors = $conn->query("SELECT vendor_id, name FROM vendors");
+                                <?php 
                                 while ($vendor = $vendors->fetch_assoc()) {
                                     echo "<option value='{$vendor['vendor_id']}'>{$vendor['name']}</option>";
                                 }
@@ -188,6 +176,7 @@ $result = $conn->query("SELECT p.*, v.name AS vendor_name FROM purchase_orders p
                 <?php endwhile; ?>
             </tbody>
         </table>
+    </div>
     </div>
 </body>
 </html>

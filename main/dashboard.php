@@ -6,8 +6,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Admin') {
     header("Location: auth/login.php"); // Redirect to login if not an admin
     exit();
 }
-// $username = $_SESSION['username']; // Get admin's username
-$username = "Username"
+
+$username = $_SESSION['username']; // Get admin's username
 ?>
 
 <!DOCTYPE html>
@@ -86,14 +86,13 @@ $username = "Username"
 <body>
     <div class="dashboard-container">
     <div class="dashboard-box">
-        <h1>Welcome, <?php echo $username; ?> (Admin)</h1>
+        <h1>Welcome, <?php echo $username; ?></h1>
         <div class="grid-container">
-        <a href="manage_users.php" class="grid-item">Manage Users</a>
-        <a href="vendors" class="grid-item">Manage Vendors</a>
-        <a href="manage_orders.php" class="grid-item">Manage Orders</a>
-        <a href="manage_inventory.php" class = "grid-item">Manage Purchase Orders</a></li>
-        <a href="view_head_orders.php" class = "grid-item">View Department Procurement Orders</a></li>
-        <a href="request_order.php" class = "grid-item">Request New Purchase Order</a></li>
+        <a href="user_management/manage_users.php" class="grid-item">Users</a>
+        <a href="vendors" class="grid-item">Vendors</a>
+        <a href="orders" class="grid-item">Orders</a>
+        <a href="inventory" class = "grid-item">Inventory</a></li>
+        <a href="requests" class = "grid-item">Requests</a></li>
         <a href="auth/logout.php" class = "grid-item logout">Logout</a></li>
             </ul>
         </nav>

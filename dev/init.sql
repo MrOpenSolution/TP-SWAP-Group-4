@@ -35,23 +35,8 @@ CREATE TABLE INVENTORY (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- Audit purposes
 );
 
--- Purchase orders table.
-CREATE TABLE ORDERS (
-    order_id INT AUTO_INCREMENT PRIMARY KEY,
-    vendor_id INT, -- Reference to vendor_id in VENDORS table
-    inventory_item INT, -- Reference to inventory_id in INVENTORY table
-    quantity INT NOT NULL,
-    request_id INT, -- Reference to request_id in REQUESTS table
-    created_by INT, -- Reference to user_id in USERS table
-    status ENUM('Pending', 'Approved', 'Completed') DEFAULT 'Pending' NOT NULL,
-    FOREIGN KEY (vendor_id) REFERENCES VENDORS(vendor_id), -- Foreign key constraint
-    FOREIGN KEY (inventory_item) REFERENCES INVENTORY(inventory_id), -- Foreign key constraint
-    FOREIGN KEY (request_id) REFERENCES REQUESTS(request_id), -- Foreign key constraint
-    FOREIGN KEY (created_by) REFERENCES USERS(user_id) -- Foreign key constraint
-);
-
 -- Procurement requests table.
-CREATE TABLE REQUESTS (
+CREATE TABLE REQ (
     request_id INT AUTO_INCREMENT PRIMARY KEY,
     item_name VARCHAR(255) NOT NULL,
     quantity INT NOT NULL,
@@ -60,6 +45,23 @@ CREATE TABLE REQUESTS (
     created_by INT, -- Reference to user_id in USERS table
     request_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     status ENUM('Pending', 'Approved', 'Rejected') DEFAULT 'Pending',
+    FOREIGN KEY (created_by) REFERENCES USERS(user_id) -- Foreign key constraint
+);
+
+-- Purchase orders table.
+CREATE TABLE ORDERS (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    vendor_id INT, -- Reference to vendor_id in VENDORS table
+    inventory_item INT, -- Reference to inventory_id in INVENTORY table
+    quantity INT NOT NULL,
+    request_id INT, -- Reference to request_id in REQUESTS table
+    created_by INT, -- Reference to user_id in USERS table
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Audit purposes
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Audit purposes
+    status ENUM('Pending', 'Approved', 'Completed') DEFAULT 'Pending' NOT NULL,
+    FOREIGN KEY (vendor_id) REFERENCES VENDORS(vendor_id), -- Foreign key constraint
+    FOREIGN KEY (inventory_item) REFERENCES INVENTORY(inventory_id), -- Foreign key constraint
+    FOREIGN KEY (request_id) REFERENCES REQ(request_id), -- Foreign key constraint
     FOREIGN KEY (created_by) REFERENCES USERS(user_id) -- Foreign key constraint
 );
 
